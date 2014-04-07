@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This start an express app, adding the date
+# to the beginning of the file name
+# Also installs the app and starts the server
+# Date format: 2013-10-01-
+
+nowDate=$(date +%Y-%m-%d-)
+fileName=$nowDate$1
+express $fileName
+cd $fileName
+npm install
+node app
+

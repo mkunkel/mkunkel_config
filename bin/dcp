@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# This will copy a directory, adding the date
+# to the beginning of the file name
+# Date format: 2013-10-01-
+
+nowDate=$(date +%Y-%m-%d-)
+fileName=$nowDate$2
+cp -rv $1 $fileName && cd $fileName
