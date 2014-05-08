@@ -1,0 +1,16 @@
+[user]
+	name = Mike Kunkel
+	email = mike@mkunkel.com
+[alias]
+	cm = commit -m
+	co = checkout
+	ap = add -p
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = true
+  pager = true
+
