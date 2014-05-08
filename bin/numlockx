@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Preventing numlock from being turned off..........................."
+while true
+do
+sleep 2
+/usr/bin/numlockx on
+done
