@@ -1,6 +1,8 @@
 # Base up and running...
 sudo add-apt-repository ppa:webupd8team/sublime-text-3 -y
 sudo add-apt-repository ppa:webupd8team/java -y
+sudo add-apt-repository ppa:tsbarnes/indicator-keylock -y
+sudo add-apt-repository ppa:daniel.pavel/solaar -y
 sudo apt-get update -y
 sudo apt-get install build-essential -y
 sudo apt-get install python-software-properties -y
@@ -30,12 +32,16 @@ ln -sf ~/code/mkunkel_config/rvmrc ~/.rvmrc
 ln -sf ~/code/mkunkel_config/.ttytterrc ~/.ttytterrc
 ln -sf ~/code/mkunkel_config/bin ~/bin
 ln -sf ~/code/mkunkel_config/Scripts ~/Scripts
+mkdir -p ~/.config/terminator
 ln -sf ~/code/mkunkel_config/config/terminator/config ~/.config/terminator/config
 
 # Core environment
-curl -sSL https://get.rvm.io | bash -s stable
+gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
+\curl -sSL https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
 rvm install 2.1
+gem install hub
+gem install pry
 sudo apt-get install oracle-java7-installer -y
 sudo apt-get install nginx -y
 sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 postgresql-contrib-9.3 -y
