@@ -1,0 +1,8 @@
+<snippet>
+    <content><![CDATA[do
+
+end]]></content>
+    <tabTrigger>dob</tabTrigger>
+    <scope>source.ruby</scope>
+    <description>Insert do … end</description>
+</snippet>

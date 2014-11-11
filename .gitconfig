@@ -5,6 +5,7 @@
 	cm = commit -m
 	co = checkout
 	ap = add -p
+	logg = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
 [color]
   diff = auto

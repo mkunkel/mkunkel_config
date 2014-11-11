@@ -119,8 +119,6 @@ mkdir -p "$*"
 cd "$*"
 }
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-export PATH=$PATH:/usr/local/bin/node:/usr/local/bin/mongodb-linux-x86_64-2.4.7/bin
+export PATH=$PATH:/usr/share/elasticsearch/bin
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
