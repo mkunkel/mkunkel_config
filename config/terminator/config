@@ -1,0 +1,39 @@
+[global_config]
+[keybindings]
+  split_horiz = F5
+  switch_to_tab_4 = <Primary><Shift>dollar
+  close_term = <Primary>F4
+  switch_to_tab_2 = <Primary><Shift>at
+  switch_to_tab_3 = <Primary><Shift>numbersign
+  switch_to_tab_1 = <Primary><Shift>exclam
+  split_vert = F6
+[profiles]
+  [[default]]
+    palette = "#000000:#cd0000:#00cd00:#cdcd00:#1e90ff:#cd00cd:#00cdcd:#e5e5e5:#4c4c4c:#ff0000:#00ff00:#ffff00:#4682b4:#ff00ff:#00ffff:#ffffff"
+    login_shell = True
+    background_darkness = 0.75
+    background_type = transparent
+    background_image = None
+    scrollback_infinite = True
+  [[laptop]]
+    use_system_font = False
+    background_darkness = 0.83
+    background_type = transparent
+    background_image = None
+    font = Monospace 14
+    scrollback_infinite = True
+  [[solarized]]
+    use_system_font = False
+    font = Monospace 11
+    background_color = "#ffffdd"
+    background_image = None
+    foreground_color = "#000000"
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]

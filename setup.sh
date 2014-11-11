@@ -30,6 +30,7 @@ ln -sf ~/code/mkunkel_config/rvmrc ~/.rvmrc
 ln -sf ~/code/mkunkel_config/.ttytterrc ~/.ttytterrc
 ln -sf ~/code/mkunkel_config/bin ~/bin
 ln -sf ~/code/mkunkel_config/Scripts ~/Scripts
+ln -sf ~/code/mkunkel_config/config/terminator/config ~/.config/terminator/config
 
 # Core environment
 curl -sSL https://get.rvm.io | bash -s stable
