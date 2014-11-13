@@ -2,8 +2,7 @@
 branches = STDIN.read.chomp
 if !branches.empty?
   branch = branches.split("\n").map(&:strip)[0].split(' ').map(&:strip)[-1]
-  second_line = branches.split("\n").map(&:strip)[1]
-  is_clean = second_line.include?("nothing to commit")
+  is_clean = branches.include?("nothing to commit")
   if !branches.empty?
     if is_clean
       puts " #{branch}"
