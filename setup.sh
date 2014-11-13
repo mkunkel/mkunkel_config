@@ -8,12 +8,14 @@ sudo apt-get install build-essential -y
 sudo apt-get install python-software-properties -y
 sudo apt-get install curl -y
 sudo apt-get install git -y
+sudo apt-get install openssh-server -y
 sudo apt-get install compizconfig-settings-manager compiz-plugins-extra -y
 
 # Core development set
 sudo apt-get install silversearcher-ag -y
 sudo apt-get install terminator -y
 sudo apt-get install yakuake -y
+sudo apt-get install nodejs -y
 sudo apt-get install sublime-text-installer -y
 
 # I'm moving in!
@@ -45,10 +47,11 @@ gem install pry
 sudo apt-get install oracle-java7-installer -y
 sudo apt-get install nginx -y
 sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 postgresql-contrib-9.3 -y
+sudo apt-get install postgresql-9.3-postgis-2.1 -y
 sudo apt-get install redis-server -y
-wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.7.deb
-dpkg -i elasticsearch-0.90.7.deb
-rm elasticsearch-0.90.7.deb
+wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.8.deb
+dpkg -i elasticsearch-0.90.8.deb
+rm elasticsearch-0.90.8.deb
 sudo apt-get install git -y
 sudo apt-get install tig -y
 sudo apt-get install numlockx -y
