@@ -36,6 +36,7 @@ ln -sf ~/code/mkunkel_config/bin ~/bin
 ln -sf ~/code/mkunkel_config/Scripts ~/Scripts
 mkdir -p ~/.config/terminator
 ln -sf ~/code/mkunkel_config/config/terminator/config ~/.config/terminator/config
+sudo apt-get install exo-utils -y
 
 # Core environment
 gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
