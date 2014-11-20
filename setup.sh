@@ -56,6 +56,7 @@ rm elasticsearch-0.90.8.deb
 sudo apt-get install git -y
 sudo apt-get install tig -y
 sudo apt-get install numlockx -y
+sudo apt-get install libxslt-dev libxml2-dev
 mkdir /tmp/adobefont
 cd /tmp/adobefont
 wget http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip
