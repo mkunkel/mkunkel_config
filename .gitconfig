@@ -2,7 +2,7 @@
 	name = Mike Kunkel
 	email = mike@mkunkel.com
 [alias]
-	cm = commit -m
+	cm = commit -v
 	co = checkout
 	ap = add -p
 	logg = log --graph --decorate --pretty=oneline --abbrev-commit --all
