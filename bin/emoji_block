@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+border, center, size = ARGV
+size = size.to_i
+
+top_and_bottom = size.times.map { border }.join(' ')
+fill = (size - 2).times.map { center }.unshift(border).push(border).join(' ')
+
+puts top_and_bottom
+(size - 2).times { puts fill }
+puts top_and_bottom

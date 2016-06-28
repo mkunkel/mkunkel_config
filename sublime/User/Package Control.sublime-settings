@@ -1,0 +1,22 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"AdvancedNewFile",
+		"All Autocomplete",
+		"BracketHighlighter",
+		"Emmet",
+		"GitGutter",
+		"GitHubinator",
+		"Handlebars",
+		"Package Control",
+		"RSpec",
+		"Ruby Slim",
+		"SideBarEnhancements",
+		"Theme - Soda",
+		"Theme - Spacegray"
+	]
+}

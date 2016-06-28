@@ -1,0 +1,6 @@
+#! /bin/bash
+
+for port in "$@"
+do
+  sudo fuser -k "$port"/tcp
+done

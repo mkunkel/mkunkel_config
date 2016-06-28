@@ -1,0 +1,4 @@
+#!/bin/bash
+PORT=$1
+CID=bash -c "docker ps | grep $PORT/tcp | awk '{print $1}'"
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' $CID

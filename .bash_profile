@@ -8,7 +8,12 @@ txtcyn='\[\e[0;36m\]' # Cyan
 txtwht='\[\e[0;37m\]' # White
 txtrst='\[\e[0m\]'    # Text Reset
 
+alias clip='xclip -selection c'
+alias rebase='git checkout master && git pull origin master && git checkout - && git rebase -'
+alias push='rebase && git push origin HEAD'
+alias force-push='rebase && git push -f origin HEAD'
 alias hibernate='amixer -q -D pulse sset Master mute;sudo pm-hibernate; gnome-screensaver-command -l'
+alias docker-ip="docker inspect --format '{{ .NetworkSettings.IPAddress }}' `docker ps | grep 3000/tcp | awk '{print $1}'`"
 alias mkcd='_(){ mkdir $1; cd $1; }; _'
 alias ls="ls --color=auto"
 alias  l='ls -a'
