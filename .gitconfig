@@ -2,6 +2,7 @@
 	name = Mike Kunkel
 	email = mike@mkunkel.com
 [alias]
+	pf = "!git push --force-with-lease origin \"$(git rev-parse --abbrev-ref HEAD)\""
 	cm = commit -v
 	co = checkout
 	ap = add -p
@@ -14,3 +15,5 @@
   interactive = auto
   ui = true
   pager = true
+[pull]
+	rebase = true

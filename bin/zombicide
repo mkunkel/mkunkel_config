@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+base = %w(Baldric Clovis Silas Samson Ann Nelly)
+wulfsburg = %w(Ariane Theo Karl Morrigan)
+hero_box_1 = %w(Cul'Nar Jorvak Sha'Keel Gurbak)
+adrian_smith = ['Glynda Battlestout', 'Julian', 'Sylvia Samedi', 'Tucker', 'Arnaud']
+
+characters = (base + wulfsburg + hero_box_1 + adrian_smith).shuffle
+player_count = ARGV[0].nil? ? 2 : ARGV[0].to_i
+players = []
+player_count.times { players << [] }
+
+6.times.with_index do |index|
+  i = ((index + 1) % player_count) - 1
+  players[i] << characters.pop
+end
+
+players.each.with_index do |player, index|
+  puts "Player #{index + 1}:"
+  puts player.join(', ')
+  puts
+end

@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+require 'json'
+
+url = 'https://bgg-json.azurewebsites.net/collection/jessticles'
+number = ARGV[0].to_i if ARGV[0]
+games = JSON.parse(`curl -XGET -s #{url}`).map { |game| game['name'] }
+number = number || 3
+puts games.sample(number)

@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'logger'
+
+class App
+  DASHBOARD_BASE_URL = ENV.fetch("DASHBOARD_BASE_URL", "https://app.datadoghq.com/dash/10838/elasticsearch")
+  ES_DOMAIN = ENV.fetch("ES_HOST", "canary.elasticsearch.lonelyplanet.com.")
+
+  def initialize(logger = default_logger)
+    @logger = logger
+  end
+
+  def call
+    logger.info "ES cluster name: #{es_cluster_name}"
+    logger.info "ELB name: #{elb_name}"
+    logger.info "Opening dashboard url: #{datadog_dashboard_url}"
+
+    puts datadog_dashboard_url
+    IO.popen("echo #{datadog_dashboard_url} | xclip -selection c")
+
+#    `echo #{datadog_dashboard_url} | xclip -selection c -i`
+  end
+
+  private
+
+  attr_reader :logger
+
+  def datadog_dashboard_url
+    "#{DASHBOARD_BASE_URL}?tpl_var_cluster=#{es_cluster_name}&tpl_var_elb=#{elb_name}"
+  end
+
+  def default_logger
+    Logger.new("/dev/null")
+  end
+
+  def elb_friendly_cname
+    @elb_friendly_cname ||= `dig CNAME #{ES_DOMAIN} +short`.strip
+  end
+
+  def elb_name
+    "es-cluste-ElasticL-#{elb_resource_cname.split("-")[4].upcase}"
+  end
+
+  def elb_resource_cname
+    elb_resource_cname ||= `dig CNAME #{elb_friendly_cname} +short`.strip
+  end
+
+  def es_cluster_name
+    elb_friendly_cname.split(".").first
+  end
+end
+
+if $0 == __FILE__
+  App.new.call
+end

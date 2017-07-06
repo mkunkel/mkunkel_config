@@ -1,0 +1,5 @@
+#!/bin/bash
+
+url=`es-dashboard-generator`
+echo $url
+echo $url | xclip -selection c

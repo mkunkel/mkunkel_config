@@ -1,0 +1,1 @@
+amixer get Capture | grep -q '\[off\]' && echo OFF || echo ON
