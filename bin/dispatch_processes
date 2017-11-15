@@ -1,0 +1,14 @@
+#!/bin/bash
+
+ips=$(knife search role:dispatch_production -a ipaddress | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+
+for ip in $ips
+do
+  echo "Checking $ip"
+  processes=$(ssh -o StrictHostKeyChecking=no $ip pgrep -c nginx)
+  echo "Processes: $processes"
+  while [ $(ssh -o StrictHostKeyChecking=no $ip pgrep -c nginx) != "2" ]; do
+    echo "Too many processes on $ip, restarting"
+    $(ssh -o StrictHostKeyChecking=no $ip "sudo service nginx restart")
+  done
+done

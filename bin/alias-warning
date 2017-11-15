@@ -1,0 +1,4 @@
+#!/bin/bash
+
+array="$@"
+cat ~/.aliases | grep -F --color=always "'$array'"
