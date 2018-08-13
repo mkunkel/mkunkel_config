@@ -1,28 +1,39 @@
 #!/usr/bin/env ruby
 
-border, fill, size = ARGV
-size = size.to_i
-half_size = (size / 2).floor
+border, fill = ARGV
 
-emojis = [border, fill]
-lines = []
+def emojis(border, fill, size) 
+  half_size = (size / 2).floor
 
-half_size.times do |i|
-  str =  []
-  i.times { |x| str << emojis[x % 2] }
+  emojis = [border, fill]
+  lines = []
 
-  (half_size - i).times { str << emojis[i % 2] }
-  reversed = str.reverse
+  half_size.times do |i|
+    str =  []
+    i.times { |x| str << emojis[x % 2] }
 
-  str << emojis[i % 2] if size.odd?
-  str << reversed
-  lines << str.flatten
+    (half_size - i).times { str << emojis[i % 2] }
+    reversed = str.reverse
+    str << emojis[i % 2] if size.odd?
+    str << reversed
+    lines << str.flatten
+  end 
+
+  all_lines = lines.dup
+  all_lines << size.times.map { |i| emojis[i % 2] } if size.odd?
+  lines.reverse.each { |line| all_lines << line }
+
+  all_lines.map!(&:join)
 end
 
-all_lines = lines.dup
-all_lines << size.times.map { |i| emojis[i % 2] } if size.odd?
-lines.reverse.each { |line| all_lines << line }
+size = 51
+str = ''
 
-all_lines.map!(&:join)
+loop do
+  all_lines = emojis(border, fill, size)
+  str = all_lines.join("\n")
+  break if str.length > 0 && str.length <= 4000
+  size -= 2
+end
 
-all_lines.each { |line| puts line }
+puts str
