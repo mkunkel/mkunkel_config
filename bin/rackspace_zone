@@ -1,0 +1,13 @@
+RACKSPACE_RESPONSE=`curl -s https://identity.api.rackspacecloud.com/v2.0/tokens -XPOST -d '{"auth":{"RAX-KSKEY:apiKeyCredentials":{"username":"lpdnsadmin","apiKey":"46aa9c28f1dc87f583a7544a47e60267"}}}' -H "Content-type: application/json"`
+RACKSPACE_TOKEN=`echo $RACKSPACE_RESPONSE | jq -r '.access.token.id'`
+RACKSPACE_ID=`echo $RACKSPACE_RESPONSE | jq -r '.access.token.tenant.id'`
+
+DOMAIN_ID=`curl -s https://lon.dns.api.rackspacecloud.com/v1.0/$RACKSPACE_ID/domains?name=$1 -H 'ACCEPT: application/json' -H "X-Auth-Token: $RACKSPACE_TOKEN" -H 'Content-Length: 0' | jq '.domains[].id'`
+RACKSPACE_JOB=`curl -s https://lon.dns.api.rackspacecloud.com/v1.0/$RACKSPACE_ID/domains/$DOMAIN_ID/export -H 'ACCEPT: application/json' -H "X-Auth-Token: $RACKSPACE_TOKEN" -H 'Content-Length: 0'`
+CALLBACK_URL=`echo $RACKSPACE_JOB | jq -r '.callbackUrl'`
+
+sleep 5
+
+ZONE_FILE=`curl -s $CALLBACK_URL?showDetails=true -H 'ACCEPT: application/json' -H "X-Auth-Token: $RACKSPACE_TOKEN" -H 'Content-Length: 0' | jq '.response.contents'`
+
+echo $ZONE_FILE | sed -e 's/^"//' -e 's/"$//' | awk '{gsub(/\\n/,"\n")}1'

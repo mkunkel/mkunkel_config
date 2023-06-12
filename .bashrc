@@ -119,6 +119,9 @@ mkdir -p "$*"
 cd "$*"
 }
 
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
 export PATH=$PATH:/usr/share/elasticsearch/bin
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -130,7 +133,11 @@ export NVM_DIR="/home/mikek/.nvm"
 export PATH="/usr/local/heroku/bin:$PATH"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH="$PATH:$HOME/.gem/bin" # Add RVM to PATH for scripting
 
 export TERM="screen-256color"
+. "$HOME/.cargo/env"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+eval "$(thefuck --alias)"

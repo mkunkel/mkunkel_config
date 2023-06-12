@@ -1,0 +1,151 @@
+#! /usr/bin/env ruby
+require 'pry'
+require 'yaml'
+require 'json'
+require 'awesome_print'
+require "open-uri"
+require "uri"
+
+ENVIRONMENT = ARGV[0]
+DEPLOYMENT = ARGV[1]
+COMMAND = "kubectl --kubeconfig ${HOME}/.kube/config-#{ENVIRONMENT}"
+
+def node_list
+  @node_list ||= `#{COMMAND} get nodes --no-headers -o custom-columns=NAME:.metadata.name`.split("\n")
+end
+
+def node_resources
+  return @node_resources if @node_resources
+  memory = []
+  cpu = []
+  node_list.each do |node|
+    details = YAML.load(`#{COMMAND} get node #{node} -o yaml`)
+    memory << details['status']['allocatable']['memory']
+    cpu << details['status']['allocatable']['cpu']
+  end
+  @node_resources = { memory: memory, cpu: cpu }
+end
+
+def deployment_details
+  return @deployment_details if @deployment_details
+  details = YAML.load(`#{COMMAND} get deployment #{DEPLOYMENT} -o yaml`)
+  replicas = details['spec']['replicas']
+  resources = details['spec']['template']['spec']['containers'][0]['resources']
+  cpu_requests = resources['requests']['cpu']
+  memory_requests = resources['requests']['memory']
+  cpu_limits = resources['limits']['cpu']
+  memory_limits = resources['limits']['memory']
+  @deployment_details = {
+    replicas: replicas,
+    requests: {
+      cpu: cpu_requests,
+      memory: memory_requests
+    },
+    limits: {
+      cpu: cpu_limits,
+      memory: memory_limits
+    }
+  }
+end
+
+def total_deployment_resources
+  @total_deployment_resources ||= {
+    min: {
+      cpu: cpu_total(deployment_details[:replicas], deployment_details[:requests][:cpu]),
+      memory: memory_total(deployment_details[:replicas], deployment_details[:requests][:memory])
+    },
+    max: {
+      cpu: cpu_total(deployment_details[:replicas], deployment_details[:limits][:cpu]),
+      memory: memory_total(deployment_details[:replicas], deployment_details[:limits][:memory])
+    }
+  }
+end
+
+def total_percentages
+  @total_percentages ||= {
+    min: {
+      cpu_percentage: (total_deployment_resources[:min][:cpu].to_f / sum_cpu(node_resources[:cpu])) * 100,
+      memory_percentage: (total_deployment_resources[:min][:memory].to_f / sum_memory(node_resources[:memory])) * 100
+    },
+    max: {
+      cpu_percentage: (total_deployment_resources[:max][:cpu].to_f / sum_cpu(node_resources[:cpu])) * 100,
+      memory_percentage: (total_deployment_resources[:max][:memory].to_f / sum_memory(node_resources[:memory])) * 100
+    }
+  }
+end
+
+def cpu_total(replicas, allocation)
+  allocation_units = allocation[/[a-zA-Z]+/]
+  allocation_quantity = allocation.to_i
+  total = allocation_quantity * replicas
+  if allocation_units.nil? || allocation_units.empty?
+    total
+  else
+    total / 1000.to_f
+  end
+end
+
+def memory_total(replicas, allocation)
+  allocation_units = allocation[/[a-zA-Z]+/]
+  total_allocation = "#{allocation.to_i * replicas}#{allocation_units}"
+  allocation_quantity = convert_to_kibibytes(total_allocation)
+  "#{allocation_quantity}Ki"
+end
+
+def convert_to_kibibytes(allocation)
+  allocation_units = allocation[/[a-zA-Z]+/]
+  allocation_quantity = allocation.to_i
+  multiplier = 1024 ** %w(Ki Mi Gi Ti Pi Ei).index(allocation_units)
+  allocation_quantity * multiplier
+end
+
+def sum_cpu(cpu)
+  cpu.map(&:to_i).reduce(&:+)
+end
+
+def sum_memory(memory)
+  memory.map do |mem|
+    raise 'HELL' if !mem.include?('Ki')
+    mem.to_i
+  end.reduce(&:+)
+end
+
+def overall_percentages
+  {
+    min_percent: total_percentages[:min].values.max,
+    max_percent: total_percentages[:max].values.max
+  }
+end
+
+def overall_cost
+  {
+    min_cost: total_cluster_cost * (overall_percentages[:min_percent] / 100),
+    max_cost: total_cluster_cost * (overall_percentages[:max_percent] / 100)
+  }
+end
+
+def instance_pricing
+  @instance_pricing ||= instances.uniq.each_with_object({}) do |node, hash|
+    instance = JSON.parse(`aws ec2 describe-reserved-instances --filters Name=instance-type,Values=#{node} Name=state,Values=active`)
+    puts "#{node}: #{instance['ReservedInstances'][0]['FixedPrice']}"
+    hash[node] = instance['ReservedInstances'][0]['FixedPrice']
+  end
+end
+
+def total_cluster_cost
+  instances.map { |instance| instance_pricing[instance] }.reduce(&:+)
+end
+
+def instances
+  return @instances if @instances
+  @instances = `aws ec2 describe-instances --filters Name=private-dns-name,Values=[#{node_list.join(',')}] | jq '.Reservations[].Instances[].InstanceType'`
+  @instances = @instances.split("\n").map { |instance| instance.gsub('"', '')}
+end
+
+# puts 'CLUSTER CPU:    ' + sum_cpu(node_resources[:cpu]).to_s
+# puts 'CLUSTER MEMORY: ' + sum_memory(node_resources[:memory]).to_s + "Ki"
+# ap deployment_details
+# ap total_deployment_resources
+ap overall_percentages
+ap total_cluster_cost
+ap overall_cost

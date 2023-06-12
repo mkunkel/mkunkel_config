@@ -1,0 +1,8 @@
+#! /usr/bin/env ruby
+path = '/home/mikek/Pictures/kunkelandson'
+files = Dir["#{path}/*"]
+
+files.each do |file|
+  filename = file.split('.')[-2].gsub('_-', '.')
+  `cp -n #{file} #{path}/deduped/#{filename}`
+end

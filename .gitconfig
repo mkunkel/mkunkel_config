@@ -7,6 +7,7 @@
 	co = checkout
 	ap = add -p
 	logg = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 
 [color]
   diff = auto
@@ -17,3 +18,11 @@
   pager = true
 [pull]
 	rebase = true
+[credential]
+	helper = !aws codecommit credential-helper $@
+	UseHttpPath = true
+[init]
+	defaultBranch = main
+[url "ssh://git@github.com/"]
+  insteadOf = git://github.com/
+	insteadOf = https://github.com/

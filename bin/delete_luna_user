@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source /home/mikek/luna_credentials
+
+PGPASSWORD=$DATABASE_PASSWORD psql -h $DATABASE_HOST -U $DATABASE_USERNAME -w -c "UPDATE users SET roles='{member}' FROM user_profiles WHERE users.id=user_profiles.user_id AND users.email='$1'" luna -o /dev/stdout
+PGPASSWORD=$DATABASE_PASSWORD psql -h $DATABASE_HOST -U $DATABASE_USERNAME -w -c "UPDATE user_profiles SET badges='{}' FROM users WHERE users.id=user_profiles.user_id AND users.email='$1'" luna -o /dev/stdout
+PGPASSWORD=$DATABASE_PASSWORD psql -h $DATABASE_HOST -U $DATABASE_USERNAME -w -c "SELECT email, badges, roles FROM user_profiles JOIN users ON (users.id=user_profiles.user_id) WHERE users.email='$1'" luna -o /dev/stdout

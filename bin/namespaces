@@ -1,0 +1,27 @@
+#! /usr/bin/env ruby
+
+require 'pry'
+require 'yaml'
+
+def to_time_string(time)
+end
+
+command = 'kubectl --kubeconfig ${HOME}/.kube/config-qa get namespaces -o yaml'
+output = YAML.load_stream(`#{command}`)
+details = output[0]['items'].each_with_object([]) do |item, arr|
+  if item.dig('metadata', 'labels', 'lp-service-id')
+    time = item['metadata']['labels']['updated-at']
+    year, month, day, hour, minute, second = time.match(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/).captures
+    arr << {
+      name: item['metadata']['name'],
+      lp_service_id: item['metadata']['labels']['lp-service-id'],
+      branch_name: item['metadata']['labels']['branch-name'],
+      updated_at: "#{year}-#{month}-#{day} #{hour}:#{minute}:#{second}-UTC"
+    }
+  end
+end
+
+longest_service_id = details.max_by { |detail| detail[:lp_service_id].length }[:lp_service_id].length
+longest_branch = details.max_by { |detail| detail[:branch_name].length }[:branch_name].length
+
+details.each { |detail| puts "#{detail[:name]}\t#{detail[:lp_service_id].ljust(longest_service_id + 1)}\t#{detail[:branch_name].ljust(longest_branch)}\t#{detail[:updated_at]}" }

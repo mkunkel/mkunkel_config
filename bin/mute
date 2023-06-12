@@ -1,2 +1,3 @@
 #!/bin/bash
 amixer set Capture toggle
+notify-send -t 1 `/home/mikek/bin/is_muted`

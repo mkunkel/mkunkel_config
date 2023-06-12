@@ -1,0 +1,4 @@
+#!/bin/bash
+
+
+ssh 192.168.1.14 "export DISPLAY=:0;xdg-open '$1'"

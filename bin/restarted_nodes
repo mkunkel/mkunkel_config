@@ -1,0 +1,41 @@
+#! /usr/bin/env ruby
+
+def to_ha(arr)
+  return {} unless arr
+  arr = arr.split
+  {
+    name: arr[0],
+    instances: arr[1],
+    status: arr[2],
+    restarts: arr[3].to_i,
+    age_in_days: age_in_days(arr[4])
+  }
+end
+
+def age_in_days(str)
+  char = str[-1]
+  num = str[/[0-9]*/]
+  # if less than one day old, round up to one day
+  %w(h m).include?(char) ? 1 : num.to_i
+end
+
+def over_threshold?(restarts, age)
+  return false if restarts == 0
+  restarts > age
+end
+
+def send_output(pod)
+  puts "#{pod[:name]} has been restarted #{pod[:restarts]} times in #{pod[:age_in_days]} days"
+end
+
+environment = ARGV[0] || 'production'
+
+output = `kubectl --kubeconfig ${HOME}/.kube/config-#{environment} get pods`
+
+# split into array and remove header row
+output = output.split("\n")[1..-1]
+pods = output.map { |str| to_ha(str) if str }
+
+pods.each do |pod|
+  send_output(pod) if over_threshold?(pod[:restarts], pod[:age_in_days])
+end

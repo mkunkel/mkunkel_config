@@ -1,0 +1,18 @@
+#! /usr/bin/env ruby
+
+UTC_OFFSET = 5
+
+hour, minute = ARGV[0].split(':')
+
+hour = hour.to_i
+minute ||= '00'
+
+utc_hour = (hour + UTC_OFFSET) % 24
+utc_hour = utc_hour.to_s.rjust(2, '0')
+utc_pm_hour = (hour + UTC_OFFSET + 12) % 24 if hour < 12 
+utc_pm_hour = utc_pm_hour.to_s.rjust(2, '0')
+
+output = "#{utc_hour}:#{minute} UTC"
+output << " or #{utc_pm_hour}:#{minute} UTC" if utc_pm_hour
+
+puts output

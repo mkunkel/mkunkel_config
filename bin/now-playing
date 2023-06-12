@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+while true; do 
+  PID=$(ps aux | egrep "/usr/share/google-play-music-desktop-player/Google Play Music Desktop Player$" | awk '{ print $2}')
+  TITLE=$(wmctrl -l -p | grep $PID | awk '{$1=$2=$3=$4=""; print }' | sed 's/^[ \t]*//;s/[ \t]*$//')
+  RECENT=$(cat /home/mikek/now-playing.txt)
+
+  if [[ ! -z "$PID" ]] && [[ $RECENT != $TITLE ]]
+  then
+    echo $TITLE > /home/mikek/now-playing.txt
+    notify-send -t 1500 -i "google-play-music-desktop-player" "$TITLE"
+  fi
+  sleep 5
+done

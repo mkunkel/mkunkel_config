@@ -1,0 +1,15 @@
+#! /bin/bash
+
+echo 'qa'
+kubectl --kubeconfig ${HOME}/.kube/config-qa delete all,svc,secrets,cm,pv,pvc,ns,storageclasses,ds -l lp-service-id=$1
+kubectl --kubeconfig ${HOME}/.kube/config-qa delete all,svc,secrets,cm,pv,pvc,ns,storageclasses,ds -l app=$1
+echo
+
+echo 'staging'
+kubectl --kubeconfig ${HOME}/.kube/config-staging delete all,svc,secrets,cm,pv,pvc,ns,storageclasses,ds -l lp-service-id=$1
+kubectl --kubeconfig ${HOME}/.kube/config-staging delete all,svc,secrets,cm,pv,pvc,ns,storageclasses,ds -l app=$1
+echo
+
+echo 'production'
+kubectl --kubeconfig ${HOME}/.kube/config-production delete all,svc,secrets,cm,pv,pvc,ns,storageclasses,ds -l lp-service-id=$1
+kubectl --kubeconfig ${HOME}/.kube/config-production delete all,svc,secrets,cm,pv,pvc,ns,storageclasses,ds -l app=$1

@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+
+echo "Grepping chef-repo"
+echo "--------------------------------------------------------------------"
+grep -r $1 /home/mikek/lp/chef-repo/
+echo
+echo "Grepping qa kubernetes"
+echo "--------------------------------------------------------------------"
+/home/mikek/lp/ops/experimental/bin/grep-envvars $1 qa
+echo
+echo "Grepping staging kubernetes"
+echo "--------------------------------------------------------------------"
+/home/mikek/lp/ops/experimental/bin/grep-envvars $1 staging
+echo
+echo "Grepping production kubernetes"
+echo "--------------------------------------------------------------------"
+/home/mikek/lp/ops/experimental/bin/grep-envvars $1
