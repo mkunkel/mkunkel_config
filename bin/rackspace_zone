@@ -1,4 +1,4 @@
-RACKSPACE_RESPONSE=`curl -s https://identity.api.rackspacecloud.com/v2.0/tokens -XPOST -d '{"auth":{"RAX-KSKEY:apiKeyCredentials":{"username":"lpdnsadmin","apiKey":"46aa9c28f1dc87f583a7544a47e60267"}}}' -H "Content-type: application/json"`
+RACKSPACE_RESPONSE=`curl -s https://identity.api.rackspacecloud.com/v2.0/tokens -XPOST -d '{"auth":{"RAX-KSKEY:apiKeyCredentials":{"username":"lpdnsadmin","apiKey":"$RACKSPACE_API_KEY"}}}' -H "Content-type: application/json"`
 RACKSPACE_TOKEN=`echo $RACKSPACE_RESPONSE | jq -r '.access.token.id'`
 RACKSPACE_ID=`echo $RACKSPACE_RESPONSE | jq -r '.access.token.tenant.id'`
 

@@ -8,13 +8,10 @@ txtcyn='\[\e[0;36m\]' # Cyan
 txtwht='\[\e[0;37m\]' # White
 txtrst='\[\e[0m\]'    # Text Reset
 
-alias qa-kubectl='kubectl --kubeconfig ${HOME}/.kube/config-qa'
-alias staging-kubectl='kubectl --kubeconfig ${HOME}/.kube/config-staging'
 alias prod-kubectl='ax-lp-prod kubectl --kubeconfig ~/.kube/config-eks-prod'
 alias nonprod-kubectl='ax-lp-nonprod kubectl --kubeconfig ~/.kube/config-eks-nonprod'
 alias failover-kubectl='kubectl --kubeconfig ${HOME}/.kube/config-failover'
 alias zk-kubectl='ax-planningbooking kubectl --kubeconfig ${HOME}/.kube/config-zk-sandbox'
-alias test-kubectl='ax-lp-nonprod kubectl --kubeconfig ${HOME}/.kube/config-eks-testing'
 alias lp-prod-kubectl='ax-lp-prod kubectl --kubeconfig ${HOME}/.kube/config-eks-prod-old'
 alias local-kubectl='kubectl --kubeconfig ${HOME}/.kube/config'
 
@@ -134,6 +131,17 @@ function google {
 _lp () { local cur; cur=${COMP_WORDS[$COMP_CWORD]}; COMPREPLY=( $( compgen -d -- $HOME/lp/ | grep $cur | xargs --no-run-if-empty -l1 basename ) ); return 0; }
 complete -F _lp lp
 
+if grep -q "microsoft" /proc/version > /dev/null 2>&1; then
+    if service docker status 2>&1 | grep -q "is not running"; then
+        wsl.exe --distribution "${WSL_DISTRO_NAME}" --user root \
+            --exec /usr/sbin/service docker start > /dev/null 2>&1
+    fi
+fi
+
+export DISPLAY=:0
+#export BROWSER=/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe
+source /home/mikek/.awsvault/envvars
+
 PS1="$txtcyn\u@\h$txtpur|$txtylw\W$txtgrn\$(branch)$txtcyn:$txtrst"
 export PATH=$PATH:/usr/local/bin/redis-stable/src
 export GEM_HOME=$HOME/.gem
@@ -144,6 +152,7 @@ export GEM_PATH=$HOME/.gem
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 preexec() { /home/mikek/bin/alias-warning $1; }
 
-export PATH="/bin:/usr/bin:/usr/local/bin:$HOME/.cargo/bin:$HOME/.bin:/home/mikek/.krew/bin:/home/mikek/go/bin:$PATH"
+export PATH="/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.bin:/home/mikek/.krew/bin:/home/mikek/go/bin:$PATH"
 export EDITOR=nano
+#export BROWSER="/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe"
 export PATH="$HOME/.tfenv/bin:$PATH"
