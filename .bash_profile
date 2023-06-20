@@ -17,7 +17,7 @@ alias local-kubectl='kubectl --kubeconfig ${HOME}/.kube/config'
 
 
 
-alias wiz='wizcli auth --id q3oa3oxx3jct7oz735idom453bwreg3wjlxv5e4qm72yzu2gfpzq --secret tceyireDukt1sfLBOFZd8mbP8WdAUzUYufKk9b5Wa1SR03UnTKRJWb8enqxF3Cjg && wizcli docker scan --policy rv-ignore-unfixed-vuln-policy --policy-hits-only --image'
+alias wiz='wizcli auth --id $WIZ_ID --secret $WIZ_SECRET && wizcli docker scan --policy rv-ignore-unfixed-vuln-policy --policy-hits-only --image'
 
 alias kops='/home/mikek/kops/1.24.1/kops'
 alias axl='aws-okta login'
@@ -37,7 +37,6 @@ alias pip='python3 -m pip'
 alias adr='_(){ docker run --rm -it -v "/etc/passwd:/etc/passwd" -v "/etc/groups:/etc/groups" -v "$(pwd)":/docs --user "$(id -u):$(id -g)" extenda/adr-tools "$@"; }; _'
 alias bigfiles='sudo du -ch / | sort -h | tail -n 30'
 alias btfix='sudo rmmod btusb && sleep 2 && sudo modprobe btusb'
-alias sonicwall='yes | ~/ne2/netExtenderClient/netExtender -u mikek -p "&9D09L$FvYty^@n4xr0^c" -d LPWORLD 208.104.199.169:4433'
 alias dispatch-versions='knife ssh role:dispatch_production -a ipaddress "sudo dpkg -l dispatch-canary | grep amd" | awk '"'"'{ printf "%-12s - %s\n", $1, $4 }'"'"''
 alias locklab='ssh majorwood@zebrahuddle.com "tail -n 20 /home/majorwood/bin/locklab.log"'
 alias CAPS='xdotool key Caps_Lock'
